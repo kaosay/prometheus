@@ -1,0 +1,35 @@
+
+# how to install prometheus
+
+apt update
+
+apt install prometheus
+
+# how to install grafana
+
+sudo wget -q -O /usr/share/keyrings/grafana.key https://apt.grafana.com/gpg.key
+echo "deb [signed-by=/usr/share/keyrings/grafana.key] https://apt.grafana.com stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list
+
+apt install grafana
+
+# How to install nginx-prometheus-exporter
+
+wget https://github.com/nginxinc/nginx-prometheus-exporter/releases/download/v0.11.0/nginx-prometheus-exporter_0.11.0_linux_amd64.tar.gz
+
+cp ./nginx-prometheus-exporter /usr/local/bin
+
+vim /lib/systemd/system/nginx-exporter.service
+
+[Unit]
+Description=Nginx Prometheus Exporter
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/nginx-prometheus-exporter -nginx.scrape-uri=http://localhost:8080/nginx_status
+#Restart=always
+User=nobody
+Group=nogroup
+
+[Install]
+WantedBy=multi-user.target
+
