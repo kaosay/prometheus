@@ -1,0 +1,13 @@
+[Unit]
+Description=Nginx Prometheus Exporter
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/nginx-prometheus-exporter -nginx.scrape-uri=http://localhost:8080/nginx_status
+#Restart=always
+User=nobody
+Group=nogroup
+
+[Install]
+WantedBy=multi-user.target
+
