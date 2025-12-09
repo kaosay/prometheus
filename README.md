@@ -108,3 +108,28 @@ services:
       start_period: 10s
       timeout: 10s
 ```
+
+```
+version: '3.8'
+services:
+  json-exporter:
+    image: prometheuscommunity/json-exporter:latest
+    container_name: json-exporter   
+    cpus: 0.5
+    mem_limit: 256m
+    restart: unless-stopped
+    ports:
+      - "7979:7979"
+    volumes:
+      - ./json-exporter-config.yml:/config.yml:ro
+    command:
+      - '--config.file=/config.yml'
+      - '--web.listen-address=:7979'
+    # ❤️ Health check (critical for production)
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--timeout=3", "http://localhost:7979/metrics", "-O", "/dev/null"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+```
