@@ -83,3 +83,28 @@ services:
         #volumes:
         #  grafana-data:
 ```
+
+```
+version: '3.7'
+
+services:
+  http_json_exporter:
+    image: josephspurrier/http_json_exporter:latest
+    mem_limit: 512m  # Limit memory usage to 512 MB
+    cpus: 0.5  # Limit CPU usage to 0.5 CPUs (50% of a single CPU core)
+    restart: unless-stopped
+    container_name: http_json_exporter
+    ports:
+      - "9119:9119"  # Expose port 9119 for metrics
+    volumes:
+      - ./config.yml:/etc/http_json_exporter/config.yml  # Mount config file
+    #environment:
+    #  - TARGET_URL=http://your_target_url_to_export_json
+    #  - JSON_PATH=your_json_path  # Specify the JSON path to scrape from the target URL
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9119/metrics"]
+      interval: 30s
+      retries: 3
+      start_period: 10s
+      timeout: 10s
+```
