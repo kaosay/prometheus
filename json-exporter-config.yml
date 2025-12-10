@@ -1,0 +1,10 @@
+modules:
+  default:  # 默认模块，所有target共用此规则
+    metrics:
+      # 通用指标：提取json里的key作为指标值（按需调整key和指标名）
+      - name: api_response_code  # 指标名
+        kind: gauge  # 指标类型（gauge/counter）
+        path: "{.code}"  # json路径（根节点code字段，通用场景适配多数接口）
+          #- name: api_data_count
+          #  kind: gauge
+          #  path: "{.data.total}"  # 嵌套字段（data下的total）
