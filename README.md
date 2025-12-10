@@ -133,3 +133,22 @@ services:
       retries: 3
       start_period: 10s
 ```
+## Setting json_exporter, add config to prometheus.yml
+```
+  - job_name: json_api
+    static_configs:
+      - targets:
+        - http://10.0.0.1/api/test1/
+        - http://10.0.0.1/api/test2/
+    metrics_path: /probe
+    params:
+      module: [default]
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 10.0.0.1:7979   # json_exporter 所在机器:端口
+```
+
